@@ -4,12 +4,12 @@ interface CounterState {
 	bears: number;
 	increasePopulation: () => void;
 	removeAllBears: () => void;
-	updateBears: () => number;
+	//updateBears: () => number;
 }
 
 export const useStore = create<CounterState>(set => ({
 	bears: 0,
 	increasePopulation: () => set(state => ({ bears: state.bears + 1 })),
 	removeAllBears: () => set({ bears: 0 }),
-	updateBears: (newBears: number) => set({ bears: newBears }),
+	//updateBears: (newBears: number) => set({ bears: newBears }),
 }));
