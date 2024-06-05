@@ -1,6 +1,10 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import GetUsers from '../components/getUsers';
+import UsersTable from '../components/UsersTable';
 
 export const Route = createLazyFileRoute('/')({
-	component: () => <GetUsers />,
+	component: () => (
+		<>
+			<UsersTable />
+		</>
+	),
 });

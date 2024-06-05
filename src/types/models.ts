@@ -1,5 +1,8 @@
 export interface User {
 	id: number;
-	name: string;
-	last_name?: string;
+	url?: string;
+	username: string;
+	password?: string;
+	email?: string;
+	groups?: string[];
 }

@@ -5,6 +5,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 
 import { routeTree } from './routeTree.gen';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 
 const queryClient = new QueryClient();
