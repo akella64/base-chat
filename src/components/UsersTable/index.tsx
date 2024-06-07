@@ -1,14 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 import type { ApiResponse } from '../../types/responses';
 import type { User } from '../../types/models';
 
-import { getUsers } from '../../services/apiService';
-import CreateUserButton from '../CreateUserButton/index';
-import ChangeUserButton from '../ChangeUserButton';
-import DeleteUserButton from '../DeleteUserButton';
+import { getUsers } from '../../services/user/queries';
+import CreateButton from './CreateButton/index';
+import ChangeButton from './ChangeButton';
+import DeleteButton from './DeleteButton';
 
 export default function UsersTable() {
 	const [users, setUsers] = useState<User[]>([]);
@@ -36,13 +35,13 @@ export default function UsersTable() {
 						<div>
 							Имя: <b>{item.username}</b>
 						</div>
-						<ChangeUserButton user={item} setUsers={setUsers} />
-						<DeleteUserButton userId={item.id} setUsers={setUsers} />
+						<ChangeButton user={item} setUsers={setUsers} />
+						<DeleteButton userId={item.id} setUsers={setUsers} />
 					</div>
 				))}
 			</div>
 
-			<CreateUserButton setUsers={setUsers} />
+			<CreateButton setUsers={setUsers} />
 		</>
 	);
 }

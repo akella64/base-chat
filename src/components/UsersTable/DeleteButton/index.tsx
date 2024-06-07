@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import toast, { Toaster } from 'react-hot-toast';
 
-import type { User as UserModel } from '../../types/models';
-import { deleteUser } from '../../services/apiService';
+import type { User as UserModel } from '../../../types/models';
+import { deleteUser } from '../../../services/user/queries';
 
 type SetUsers = React.Dispatch<React.SetStateAction<UserModel[]>>;
 
-export default function DeleteUserButton({
+export default function Delete({
 	userId,
 	setUsers,
 }: {

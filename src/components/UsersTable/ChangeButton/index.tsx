@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 
-import type { User as UserModel } from '../../types/models';
-import { updateUser } from '../../services/apiService';
+import type { User as UserModel } from '../../../types/models';
+import { updateUser } from '../../../services/user/queries';
 
 const mutateUpdateUser = async (input: {
 	userId: number;
@@ -17,7 +17,7 @@ const mutateUpdateUser = async (input: {
 
 type SetUsers = React.Dispatch<React.SetStateAction<UserModel[]>>;
 
-export default function ChangeUserButton({
+export default function ChangeButton({
 	setUsers,
 	user,
 }: {

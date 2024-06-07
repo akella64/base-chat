@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 
-import type { User as UserModel } from '../../types/models';
-import { createUser } from '../../services/apiService';
+import type { User as UserModel } from '../../../types/models';
+import { createUser } from '../../../services/user/queries';
 
 type SetUsers = React.Dispatch<React.SetStateAction<UserModel[]>>;
 
-export default function CreateUserButton({ setUsers }: { setUsers: SetUsers }) {
+export default function CreateButton({ setUsers }: { setUsers: SetUsers }) {
 	const [showModal, setShowModal] = useState(false);
 
 	const mutation = useMutation({

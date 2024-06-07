@@ -6,3 +6,8 @@ export interface ApiResponse {
 	previous: string;
 	results: User[];
 }
+
+export interface Tokens {
+	refresh: string;
+	access: string;
+}
