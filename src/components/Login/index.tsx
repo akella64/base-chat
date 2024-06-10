@@ -6,8 +6,9 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import toast, { Toaster } from 'react-hot-toast';
 
-import { loginAuth } from '../../services/auth/queries';
 import type { Tokens } from '../../types/responses';
+
+import { loginAuth } from '../../services/auth/queries';
 
 type UserLogin = {
 	username: string;
@@ -24,7 +25,7 @@ export default function Login() {
 		mutationFn: mutateLoginAuth,
 		onSuccess: (data: Tokens) => {
 			sessionStorage.setItem('access_token', data.access);
-			// TODO: fix rerender to table
+			window.location.reload();
 			reset();
 		},
 		onError: error => {

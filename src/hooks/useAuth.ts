@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { checkAuth } from '../services/auth/queries';
 
 export const useAuth = () => {
-	const [isAuth, setIsAuth] = useState<boolean>(false);
-	const [loading, setLoading] = useState<boolean>(true);
+	const [isAuth, setIsAuth] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchAuthStatus = async () => {
