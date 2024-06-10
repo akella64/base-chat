@@ -5,26 +5,39 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import toast, { Toaster } from 'react-hot-toast';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
 import type { Tokens } from '../../types/responses';
 
 import { loginAuth } from '../../services/auth/queries';
+import { useState } from 'react';
 
-type UserLogin = {
-	username: string;
-	password: string;
-};
+const schema = z.object({
+	username: z.string().min(1, { message: 'Введите логин' }),
+	password: z.string().min(1, { message: 'Введите пароль' }),
+});
 
-const mutateLoginAuth = async (input: UserLogin) => {
+type Schema = z.infer<typeof schema>;
+
+const mutateLoginAuth = async (input: Schema) => {
 	const { username, password } = input;
 	return await loginAuth(username, password);
 };
 
 export default function Login() {
+	const [rememberCheck, setRememberCheck] = useState(false);
+
 	const mutation = useMutation({
 		mutationFn: mutateLoginAuth,
 		onSuccess: (data: Tokens) => {
-			sessionStorage.setItem('access_token', data.access);
+			if (rememberCheck) {
+				sessionStorage.removeItem('access_token');
+				localStorage.setItem('access_token', data.access);
+			} else {
+				localStorage.removeItem('access_token');
+				sessionStorage.setItem('access_token', data.access);
+			}
 			window.location.reload();
 			reset();
 		},
@@ -40,9 +53,11 @@ export default function Login() {
 		handleSubmit,
 		reset,
 		formState: { errors },
-	} = useForm<UserLogin>();
+	} = useForm({
+		resolver: zodResolver(schema),
+	});
 
-	const onSubmitForm: SubmitHandler<UserLogin> = data =>
+	const onSubmitForm: SubmitHandler<Schema> = data =>
 		mutation.mutate({ username: data.username, password: data.password });
 
 	return (
@@ -60,10 +75,8 @@ export default function Login() {
 								type='text'
 								{...register('username', { required: true })}
 							/>
-							{errors.username && (
-								<span className='text-[red]'>
-									Поле обязательно для заполнения
-								</span>
+							{errors.username?.message && (
+								<p className='text-[red]'>{errors.root}</p>
 							)}
 						</Col>
 					</Form.Group>
@@ -85,8 +98,12 @@ export default function Login() {
 						</Col>
 					</Form.Group>
 					<Form.Group as={Row} className='mb-3'>
-						<Col sm={{ span: 10, offset: 2 }}>
-							<Form.Check label='Запомнить' />
+						<Col sm={12}>
+							<Form.Check
+								type='checkbox'
+								onChange={e => setRememberCheck(e.target.checked)}
+								label='Запомнить'
+							/>
 						</Col>
 					</Form.Group>
 

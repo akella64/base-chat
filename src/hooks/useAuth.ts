@@ -7,7 +7,15 @@ export const useAuth = () => {
 
 	useEffect(() => {
 		const fetchAuthStatus = async () => {
-			const token = sessionStorage.getItem('access_token');
+			const token =
+				sessionStorage.getItem('access_token') ||
+				localStorage.getItem('access_token');
+
+			if (!token) {
+				setLoading(false);
+				return;
+			}
+
 			try {
 				const result = await checkAuth(token);
 
