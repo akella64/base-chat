@@ -53,7 +53,7 @@ export default function Login() {
 		handleSubmit,
 		reset,
 		formState: { errors },
-	} = useForm({
+	} = useForm<Schema>({
 		resolver: zodResolver(schema),
 	});
 
@@ -76,7 +76,7 @@ export default function Login() {
 								{...register('username', { required: true })}
 							/>
 							{errors.username?.message && (
-								<p className='text-[red]'>{errors.root}</p>
+								<p className='text-[red]'>{errors.username?.message}</p>
 							)}
 						</Col>
 					</Form.Group>
@@ -90,10 +90,8 @@ export default function Login() {
 								type='password'
 								{...register('password', { required: true })}
 							/>
-							{errors.password && (
-								<span className='text-[red]'>
-									Поле обязательно для заполнения
-								</span>
+							{errors.password?.message && (
+								<p className='text-[red]'>{errors.password?.message}</p>
 							)}
 						</Col>
 					</Form.Group>

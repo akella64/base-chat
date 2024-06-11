@@ -3,9 +3,23 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
 import type { User as UserModel } from '../../../types/models';
+
 import { updateUser } from '../../../services/user/queries';
+
+const schema = z.object({
+	id: z.number(),
+	username: z.string().min(1, { message: 'Введите логин' }),
+	email: z.string().email(),
+	password: z.string().min(1, { message: 'Введите пароль' }),
+});
+
+type Schema = z.infer<typeof schema>;
+
+type SetUsers = React.Dispatch<React.SetStateAction<UserModel[]>>;
 
 const mutateUpdateUser = async (input: {
 	userId: number;
@@ -14,8 +28,6 @@ const mutateUpdateUser = async (input: {
 	const { userId, userFields } = input;
 	return await updateUser(userId, userFields);
 };
-
-type SetUsers = React.Dispatch<React.SetStateAction<UserModel[]>>;
 
 export default function ChangeButton({
 	setUsers,
@@ -49,10 +61,14 @@ export default function ChangeButton({
 		handleSubmit,
 		reset,
 		formState: { errors },
-	} = useForm<UserModel>();
+	} = useForm<Schema>({
+		resolver: zodResolver(schema),
+	});
 
-	const onSubmitForm: SubmitHandler<UserModel> = data =>
-		mutation.mutate({ userId: user.id, userFields: data });
+	const onSubmitForm: SubmitHandler<Schema> = data => {
+		const userData = { ...data, id: user.id };
+		mutation.mutate({ userId: user.id, userFields: userData });
+	};
 
 	return (
 		<>
@@ -79,10 +95,8 @@ export default function ChangeButton({
 								defaultValue={user.username}
 								{...register('username', { required: true })}
 							/>
-							{errors.username && (
-								<span className='text-[red]'>
-									Поле обязательно для заполнения
-								</span>
+							{errors.username?.message && (
+								<p className='text-[red]'>{errors.username?.message}</p>
 							)}
 						</Form.Group>
 
@@ -97,12 +111,17 @@ export default function ChangeButton({
 						</Form.Group>
 
 						<Form.Group className='mb-3'>
-							<Form.Label>Пароль</Form.Label>
+							<Form.Label>
+								Пароль<span className='text-[red]'>*</span>
+							</Form.Label>
 							<Form.Control
 								type='password'
 								placeholder='Введите пароль'
-								{...register('password')}
+								{...register('password', { required: true })}
 							/>
+							{errors.password?.message && (
+								<p className='text-[red]'>{errors.password?.message}</p>
+							)}
 						</Form.Group>
 
 						<Button className='w-full' variant='primary' type='submit'>

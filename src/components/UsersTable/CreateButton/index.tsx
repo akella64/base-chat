@@ -3,9 +3,21 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
 import type { User as UserModel } from '../../../types/models';
+
 import { createUser } from '../../../services/user/queries';
+
+const schema = z.object({
+	id: z.number(),
+	username: z.string().min(1, { message: 'Введите логин' }),
+	email: z.string().email(),
+	password: z.string().min(1, { message: 'Введите пароль' }),
+});
+
+type Schema = z.infer<typeof schema>;
 
 type SetUsers = React.Dispatch<React.SetStateAction<UserModel[]>>;
 
@@ -33,9 +45,11 @@ export default function CreateButton({ setUsers }: { setUsers: SetUsers }) {
 		handleSubmit,
 		reset,
 		formState: { errors },
-	} = useForm<UserModel>();
+	} = useForm<Schema>({
+		resolver: zodResolver(schema),
+	});
 
-	const onSubmitForm: SubmitHandler<UserModel> = data => mutation.mutate(data);
+	const onSubmitForm: SubmitHandler<Schema> = data => mutation.mutate(data);
 
 	return (
 		<>
@@ -65,10 +79,8 @@ export default function CreateButton({ setUsers }: { setUsers: SetUsers }) {
 								placeholder='Введите имя'
 								{...register('username', { required: true })}
 							/>
-							{errors.username && (
-								<span className='text-[red]'>
-									Поле обязательно для заполнения
-								</span>
+							{errors.username?.message && (
+								<p className='text-[red]'>{errors.username?.message}</p>
 							)}
 						</Form.Group>
 
@@ -90,10 +102,8 @@ export default function CreateButton({ setUsers }: { setUsers: SetUsers }) {
 								placeholder='Введите пароль'
 								{...register('password', { required: true })}
 							/>
-							{errors.username && (
-								<span className='text-[red]'>
-									Поле обязательно для заполнения
-								</span>
+							{errors.password?.message && (
+								<p className='text-[red]'>{errors.password?.message}</p>
 							)}
 						</Form.Group>
 
