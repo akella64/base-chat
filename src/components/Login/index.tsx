@@ -10,7 +10,7 @@ import * as z from 'zod';
 
 import type { Tokens } from '../../types/responses';
 
-import { loginAuth } from '../../services/auth/queries';
+import { loginAuth } from '../../services/apiService';
 import { useState } from 'react';
 
 const schema = z.object({

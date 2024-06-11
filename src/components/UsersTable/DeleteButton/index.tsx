@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import toast, { Toaster } from 'react-hot-toast';
 
 import type { User as UserModel } from '../../../types/models';
-import { deleteUser } from '../../../services/user/queries';
+import { deleteUser } from '../../../services/apiService';
 
 type SetUsers = React.Dispatch<React.SetStateAction<UserModel[]>>;
 

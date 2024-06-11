@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import type { ApiResponse } from '../../types/responses';
 import type { User } from '../../types/models';
 
-import { getUsers } from '../../services/user/queries';
+import { getUsers } from '../../services/apiService';
 import CreateButton from './CreateButton/index';
 import ChangeButton from './ChangeButton';
 import DeleteButton from './DeleteButton';

@@ -8,7 +8,7 @@ import * as z from 'zod';
 
 import type { User as UserModel } from '../../../types/models';
 
-import { updateUser } from '../../../services/user/queries';
+import { updateUser } from '../../../services/apiService';
 
 const schema = z.object({
 	id: z.number(),

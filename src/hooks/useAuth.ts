@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { checkAuth } from '../services/auth/queries';
+import { checkAuth } from '../services/apiService';
 
 export const useAuth = () => {
 	const [isAuth, setIsAuth] = useState(false);
