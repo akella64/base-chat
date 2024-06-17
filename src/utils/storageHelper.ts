@@ -17,3 +17,13 @@ export const removeToken = (key: string): void => {
 	sessionStorage.removeItem(key);
 	localStorage.removeItem(key);
 };
+
+export const updateToken = (remember: boolean, accessToken: string) => {
+	if (remember) {
+		sessionStorage.removeItem('access_token');
+		localStorage.setItem('access_token', accessToken);
+	} else {
+		localStorage.removeItem('access_token');
+		sessionStorage.setItem('access_token', accessToken);
+	}
+};

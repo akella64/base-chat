@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from 'react-bootstrap/Button';
@@ -11,7 +12,7 @@ import * as z from 'zod';
 import type { Tokens } from '../../types/responses';
 
 import { loginAuth } from '../../services/apiService';
-import { useState } from 'react';
+import { updateToken } from '../../utils/storageHelper';
 
 const schema = z.object({
 	username: z.string().min(1, { message: 'Введите логин' }),
@@ -31,13 +32,7 @@ export default function Login() {
 	const mutation = useMutation({
 		mutationFn: mutateLoginAuth,
 		onSuccess: (data: Tokens) => {
-			if (rememberCheck) {
-				sessionStorage.removeItem('access_token');
-				localStorage.setItem('access_token', data.access);
-			} else {
-				localStorage.removeItem('access_token');
-				sessionStorage.setItem('access_token', data.access);
-			}
+			updateToken(rememberCheck, data.access);
 			window.location.reload();
 			reset();
 		},
